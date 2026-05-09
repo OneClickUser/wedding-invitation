@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모바일 청첩장</title>
+
+  <!-- 카카오톡/문자 공유 시 미리보기 정보 -->
+  <meta property="og:title" content="신랑 · 신부 결혼합니다" />
+  <meta property="og:description" content="소중한 날, 함께 축복해 주세요." />
+  <meta property="og:image" content="./images/main.jpg" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --paper: #fffdf9;
+      --text: #2f2a25;
+      --muted: #7a7168;
+      --line: #e8ded3;
+      --accent: #a67c52;
+      --accent-soft: #f1e4d5;
+      --shadow: 0 20px 50px rgba(80, 55, 30, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+      line-height: 1.75;
+      letter-spacing: -0.03em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wrap {
+      width: min(100%, 520px);
+      margin: 0 auto;
+      background: var(--paper);
+      min-height: 100vh;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 720px;
+      padding: 48px 24px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255, 253, 249, 0.2), rgba(255, 253, 249, 0.85)),
+        url("./images/main.jpg") center/cover no-repeat;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(166, 124, 82, 0.35);
+      border-radius: 32px;
+      pointer-events: none;
+    }
+
+    .hero-top,
+    .hero-bottom {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .date {
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .names {
+      margin-top: 24px;
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .section {
+      padding: 54px 24px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .section-title {
+      margin: 0 0 26px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    .invitation-text {
+      margin: 0 auto;
+      max-width: 360px;
+      font-size: 16px;
+      color: #4b433c;
+      word-break: keep-all;
+    }
+
+    .info-card {
+      margin: 0 auto;
+      padding: 24px 20px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #fffaf3;
+      text-align: left;
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .info-row:last-child {
+      border-bottom: 0;
+    }
+
+    .label {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .value {
+      color: #3c352e;
+    }
+
+    .parents {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .map-card {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      background: #fffaf3;
+      text-align: left;
+    }
+
+    .simple-map {
+      position: relative;
+      height: 260px;
+      background: #f6efe6;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .road {
+      position: absolute;
+      background: #dbc9b5;
+      border-radius: 999px;
+      opacity: 0.9;
+    }
+
+    .road.r1 { width: 86%; height: 16px; left: 7%; top: 72px; transform: rotate(-6deg); }
+    .road.r2 { width: 16px; height: 220px; left: 48%; top: 20px; transform: rotate(8deg); }
+    .road.r3 { width: 76%; height: 14px; left: 12%; bottom: 54px; transform: rotate(4deg); }
+
+    .place {
+      position: absolute;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      box-shadow: 0 8px 18px rgba(80, 55, 30, 0.08);
+      white-space: nowrap;
+    }
+
+    .church {
+      left: 50%;
+      top: 108px;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-weight: 700;
+    }
+
+    .myeongdong { left: 18px; bottom: 34px; }
+    .euljiro { right: 18px; top: 42px; }
+    .chungmuro { right: 26px; bottom: 28px; }
+    .cathedral { left: 30px; top: 42px; }
+
+    .map-body {
+      padding: 22px 18px 24px;
+    }
+
+    .address {
+      margin: 0 0 18px;
+      font-weight: 700;
+      color: #3c352e;
+    }
+
+    .transport {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .transport li {
+      margin: 5px 0;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: var(--text);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .btn.sub {
+      background: var(--accent-soft);
+      color: #6d5135;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      aspect-ratio: 1 / 1.2;
+      object-fit: cover;
+      border-radius: 20px;
+      background: #eadfd3;
+    }
+
+    .notice {
+      padding: 22px 18px;
+      border-radius: 24px;
+      background: #fffaf3;
+      border: 1px solid var(--line);
+      color: #4b433c;
+      word-break: keep-all;
+    }
+
+    .account-box {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      text-align: left;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .copy-btn {
+      margin-top: 10px;
+      width: 100%;
+      border: 0;
+      min-height: 42px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #6d5135;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .footer {
+      padding: 44px 24px 60px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+    }
+
+    .floating-share {
+      position: sticky;
+      bottom: 14px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 0 16px 14px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .floating-share button {
+      pointer-events: auto;
+      border: 0;
+      border-radius: 999px;
+      min-height: 50px;
+      background: rgba(47, 42, 37, 0.94);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+      cursor: pointer;
+    }
+
+    @media (max-width: 380px) {
+      .hero {
+        min-height: 640px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .button-group {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-top">
+        <div class="eyebrow">Wedding Invitation</div>
+        <h1>We Are Getting Married</h1>
+        <div class="date">2026. 10. 31 SAT 01:30 PM</div>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="names">김신랑&nbsp;&nbsp;·&nbsp;&nbsp;오신부</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Invitation</h2>
+      <p class="invitation-text">
+        저희 두 사람이 믿음과 사랑 안에서 하나의 가정을 이루려 합니다.<br><br>
+        소중한 걸음으로 함께해 주시어 저희의 시작을 축복해 주시면 더없는 기쁨이 되겠습니다.
+      </p>
+      <div class="parents">
+        신랑 아버지 · 어머니의 장남 신랑 이름<br>
+        신부 아버지 · 어머니의 장녀 신부 이름
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Wedding Day</h2>
+      <div class="info-card">
+        <div class="info-row">
+          <div class="label">일시</div>
+          <div class="value">2026년 10월 31일 토요일 오후 1시 30분</div>
+        </div>
+        <div class="info-row">
+          <div class="label">장소</div>
+          <div class="value">영락교회</div>
+        </div>
+        <div class="info-row">
+          <div class="label">주소</div>
+          <div class="value">서울특별시 중구 수표로 33</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Gallery</h2>
+      <div class="gallery">
+        <img src="./images/photo1.jpg" alt="웨딩 사진 1" />
+        <img src="./images/photo2.jpg" alt="웨딩 사진 2" />
+        <img src="./images/photo3.jpg" alt="웨딩 사진 3" />
+        <img src="./images/photo4.jpg" alt="웨딩 사진 4" />
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Location</h2>
+      <div class="map-card">
+        <div class="simple-map" aria-label="영락교회 약도">
+          <div class="road r1"></div>
+          <div class="road r2"></div>
+          <div class="road r3"></div>
+          <div class="place cathedral">명동성당</div>
+          <div class="place euljiro">을지로3가역</div>
+          <div class="place church">영락교회</div>
+          <div class="place myeongdong">명동역</div>
+          <div class="place chungmuro">충무로역</div>
+        </div>
+
+        <div class="map-body">
+          <p class="address">영락교회<br>서울특별시 중구 수표로 33</p>
+          <ul class="transport">
+            <li>2·3호선 을지로3가역 12번 출구 도보 약 5분</li>
+            <li>3·4호선 충무로역 6번 출구 도보 약 10분</li>
+            <li>4호선 명동역 10번 출구 도보 약 10분</li>
+          </ul>
+
+          <div class="button-group">
+            <a class="btn" href="https://map.naver.com/p/search/%EC%98%81%EB%9D%BD%EA%B5%90%ED%9A%8C" target="_blank" rel="noopener">네이버 지도</a>
+            <a class="btn sub" href="https://map.kakao.com/link/search/%EC%98%81%EB%9D%BD%EA%B5%90%ED%9A%8C" target="_blank" rel="noopener">카카오맵</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Notice</h2>
+      <div class="notice">
+        <strong>화환 안내</strong><br><br>
+        예식 장소 사정상 화환 반입이 어렵습니다.<br>
+        축하의 마음만 감사히 받겠습니다.<br>
+        너그러운 양해 부탁드립니다.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Contact</h2>
+      <div class="button-group">
+        <a class="btn" href="tel:010 0000 0000">신랑에게 연락</a>
+        <a class="btn sub" href="tel:010 0000 0000">신부에게 연락</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">마음 전하실 곳</h2>
+      <div class="account-box">
+        신랑측: 은행명 000-0000-0000 예금주 이름
+        <button class="copy-btn" onclick="copyText('은행명 000-0000-0000 예금주 이름')">계좌 복사</button>
+      </div>
+      <div class="account-box">
+        신부측: 은행명 000-0000-0000 예금주 이름
+        <button class="copy-btn" onclick="copyText('은행명 000-0000-0000 예금주 이름')">계좌 복사</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      함께해 주시는 모든 분들께 진심으로 감사드립니다.
+    </footer>
+
+    <div class="floating-share">
+      <button onclick="shareInvitation()">청첩장 공유하기</button>
+    </div>
+  </main>
+
+  <script>
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(function () {
+        alert("복사되었습니다.");
+      }).catch(function () {
+        alert("복사에 실패했습니다. 직접 선택하여 복사해 주세요.");
+      });
+    }
+
+    function shareInvitation() {
+      const shareData = {
+        title: "신랑 · 신부 결혼합니다",
+        text: "소중한 날, 함께 축복해 주세요.",
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData);
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(function () {
+          alert("청첩장 링크가 복사되었습니다.");
+        });
+      }
+    }
+  </script>
+</body>
+</html>
