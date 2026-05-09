@@ -176,48 +176,153 @@
 
     .simple-map {
       position: relative;
-      height: 260px;
-      background: #f6efe6;
+      height: 300px;
+      background:
+        /* radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.82) 0 11%, transparent 12%),
+        radial-gradient(circle at 76% 70%, rgba(255, 255, 255, 0.6) 0 10%, transparent 11%), */
+        linear-gradient(135deg, #fbf4ea 0%, #f2e5d6 100%);
       border-bottom: 1px solid var(--line);
       overflow: hidden;
     }
 
-    .road {
+    .simple-map::before {
+      content: "";
       position: absolute;
-      background: #dbc9b5;
-      border-radius: 999px;
-      opacity: 0.9;
+      inset: 16px;
+      border: 1px solid rgba(166, 124, 82, 0.22);
+      border-radius: 24px;
+      pointer-events: none;
+      z-index: 5;
     }
 
-    .road.r1 { width: 86%; height: 16px; left: 7%; top: 72px; transform: rotate(-6deg); }
-    .road.r2 { width: 16px; height: 220px; left: 48%; top: 20px; transform: rotate(8deg); }
-    .road.r3 { width: 76%; height: 14px; left: 12%; bottom: 54px; transform: rotate(4deg); }
+    /* .simple-map::after {
+      content: "YOUNGNAK CHURCH";
+      position: absolute;
+      right: 20px;
+      bottom: 14px;
+      color: rgba(166, 124, 82, 0.22);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      z-index: 1;
+    } */
+
+    .road {
+      position: absolute;
+      background: #d7c1aa;
+      border-radius: 999px;
+      opacity: 0.95;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 4px 12px rgba(120, 86, 50, 0.08);
+      z-index: 1;
+    }
+
+    .road::after {
+      content: "";
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 50%;
+      height: 1px;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    /* CSS로 그리는 약도: 실제 이미지 삽입이 아니라 div 배치 방식 */
+    .road.r1 {
+      width: 112%;
+      height: 18px;
+      left: -6%;
+      top: 68px;
+      transform: rotate(-2.2deg);
+    }
+
+    .road.r2 {
+      width: 18px;
+      height: 390px;
+      left: 52%;
+      top: -52px;
+      transform: rotate(-11deg);
+    }
+
+    .road.r2::after {
+      left: 50%;
+      right: auto;
+      top: 6%;
+      bottom: 6%;
+      width: 1px;
+      height: auto;
+      transform: translateX(-50%);
+    }
+
+    .road.r3 {
+      width: 112%;
+      height: 18px;
+      left: -8%;
+      bottom: 58px;
+      transform: rotate(-3deg);
+    }
 
     .place {
       position: absolute;
-      padding: 8px 11px;
+      padding: 8px 12px;
       border-radius: 999px;
-      background: white;
-      border: 1px solid var(--line);
+      background: rgba(255, 253, 249, 0.96);
+      border: 1px solid rgba(166, 124, 82, 0.28);
       font-size: 12px;
-      box-shadow: 0 8px 18px rgba(80, 55, 30, 0.08);
+      color: #4b3d31;
+      box-shadow: 0 10px 22px rgba(80, 55, 30, 0.1);
       white-space: nowrap;
+      z-index: 4;
+      backdrop-filter: blur(6px);
+    }
+
+    .place::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      vertical-align: 1px;
+      opacity: 0.75;
     }
 
     .church {
-      left: 50%;
-      top: 108px;
+      left: 60%;
+      top: 124px;
       transform: translateX(-50%);
+      padding: 11px 18px;
       background: var(--accent);
       color: white;
       border: none;
+      font-size: 14px;
       font-weight: 700;
+      box-shadow: 0 14px 30px rgba(166, 124, 82, 0.3);
     }
 
-    .myeongdong { left: 18px; bottom: 34px; }
-    .euljiro { right: 18px; top: 42px; }
-    .chungmuro { right: 26px; bottom: 28px; }
-    .cathedral { left: 30px; top: 42px; }
+    .church::before {
+      width: 8px;
+      height: 8px;
+      background: white;
+      opacity: 0.92;
+    }
+
+    .euljiro-entrance { left: 20px; top: 28px; }
+    .euljiro { right: 20px; top: 24px; }
+    .cathedral { left: 30%; top: 156px; }
+    .myeongdong { left: 25%; bottom: 30px; }
+    .chungmuro { right: 20px; bottom: 42px; }
+
+    .pin-line {
+      position: absolute;
+      width: 1px;
+      height: 34px;
+      left: 55%;
+      top: 164px;
+      background: linear-gradient(to bottom, rgba(166,124,82,0.5), transparent);
+      z-index: 3;
+    }
 
     .map-body {
       padding: 22px 18px 24px;
@@ -418,9 +523,11 @@
           <div class="road r1"></div>
           <div class="road r2"></div>
           <div class="road r3"></div>
-          <div class="place cathedral">명동성당</div>
+          <div class="place euljiro-entrance">을지로입구역</div>
           <div class="place euljiro">을지로3가역</div>
           <div class="place church">영락교회</div>
+          <div class="pin-line"></div>
+          <div class="place cathedral">명동성당</div>
           <div class="place myeongdong">명동역</div>
           <div class="place chungmuro">충무로역</div>
         </div>
@@ -428,14 +535,15 @@
         <div class="map-body">
           <p class="address">영락교회<br>서울특별시 중구 수표로 33</p>
           <ul class="transport">
+            <li>2호선 을지로입구역 인근</li>
             <li>2·3호선 을지로3가역 12번 출구 도보 약 5분</li>
             <li>3·4호선 충무로역 6번 출구 도보 약 10분</li>
             <li>4호선 명동역 10번 출구 도보 약 10분</li>
           </ul>
 
           <div class="button-group">
-            <a class="btn" href="https://map.naver.com/p/search/%EC%98%81%EB%9D%BD%EA%B5%90%ED%9A%8C" target="_blank" rel="noopener">네이버 지도</a>
-            <a class="btn sub" href="https://map.kakao.com/link/search/%EC%98%81%EB%9D%BD%EA%B5%90%ED%9A%8C" target="_blank" rel="noopener">카카오맵</a>
+            <a class="btn" href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%A4%91%EA%B5%AC%20%EC%88%98%ED%91%9C%EB%A1%9C%2033" target="_blank" rel="noopener">네이버 지도</a>
+            <a class="btn sub" href="https://map.kakao.com/link/search/%EC%84%9C%EC%9A%B8%20%EC%A4%91%EA%B5%AC%20%EC%88%98%ED%91%9C%EB%A1%9C%2033" target="_blank" rel="noopener">카카오맵</a>
           </div>
         </div>
       </div>
